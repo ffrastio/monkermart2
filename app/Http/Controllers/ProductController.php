@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +15,10 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return view('pages.product.index');
+        $items = Product::all();
+        return view('pages.product.index')->with([
+            'items' => $items
+        ]);
     }
 
     /**
@@ -49,6 +53,10 @@ class ProductController extends Controller
         //
     }
 
+    public function gallery($id)
+    {
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -81,5 +89,10 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+        $item = Product::findOrFail($id);
+
+        $item->delete();
+
+        return redirect()->route('product.index');
     }
 }
