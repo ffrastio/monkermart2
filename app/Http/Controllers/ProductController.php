@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Str;
 
 class ProductController extends Controller
 {
@@ -38,9 +40,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         //
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+
+        Product::create($data);
+
+        return redirect()->route('product.index');
     }
 
     /**
@@ -67,6 +75,12 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
+
+        $items = Product::findOrFail($id);
+
+        return view('pages.product.edit')->with([
+            'items' => $items
+        ]);
     }
 
     /**
@@ -76,9 +90,16 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         //
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+        $items = Product::findOrFail($id);
+        
+        $items->update($data);
+
+        return redirect()->route('product.index');
     }
 
     /**

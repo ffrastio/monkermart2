@@ -14,3 +14,16 @@
 <!-- Page level custom scripts -->
 <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+
+<!-- CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('.ckeditor'))
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
