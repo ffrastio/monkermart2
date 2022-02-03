@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductGalleryRequest;
 use App\Models\Product;
 use App\Models\ProductGallery;
 use Illuminate\Http\Request;
-use Str;
 
-class ProductController extends Controller
+class ProductGalleryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +17,8 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $items = Product::all();
-        return view('pages.product.index')->with([
+        $items = ProductGallery::with('Product')->get();
+        return view('pages.product-gallery.index')->with([
             'items' => $items
         ]);
     }
@@ -32,7 +31,11 @@ class ProductController extends Controller
     public function create()
     {
         //
-        return view('pages.product.create');
+        $product = Product::all();
+
+        return view('pages.product-gallery.create')->with([
+            'product' => $product
+        ]);
     }
 
     /**
@@ -41,15 +44,19 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductGalleryRequest $request)
     {
         //
         $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
 
-        Product::create($data);
+        $data['photo'] = $request->file('photo')->store(
+            'assets/product',
+            'public'
+        );
 
-        return redirect()->route('product.index');
+        ProductGallery::create($data);
+
+        return redirect()->route('product-gallery.index');
     }
 
     /**
@@ -63,8 +70,6 @@ class ProductController extends Controller
         //
     }
 
-
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -74,12 +79,6 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
-
-        $items = Product::findOrFail($id);
-
-        return view('pages.product.edit')->with([
-            'items' => $items
-        ]);
     }
 
     /**
@@ -89,16 +88,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
         //
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
-        $items = Product::findOrFail($id);
-
-        $items->update($data);
-
-        return redirect()->route('product.index');
     }
 
     /**
@@ -110,25 +102,10 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
-        $item = Product::findOrFail($id);
-
-        ProductGallery::where('product_id', $id)->delete();
+        $item = ProductGallery::findOrFail($id);
 
         $item->delete();
 
-        return redirect()->route('product.index');
-    }
-
-    public function gallery(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
-        $items = ProductGallery::with('Product')
-            ->where('product_id', $id)
-            ->get();
-
-        return view('pages.product.gallery')->with([
-            'product' => $product,
-            'items' => $items
-        ]);
+        return redirect()->route('product-gallery.index');
     }
 }
