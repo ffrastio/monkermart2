@@ -53,7 +53,7 @@
     </div>
 
     <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="{{ route('transaction.index') }}" class="nav-link">
             <i class="fas fa-fw fa-dollar-sign"></i>
             <span>Daftar Transaksi</span>
         </a>
