@@ -5,15 +5,17 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-sm-flex mt-4 align-items-center mb-4 ">
-            <h1 class="h3 mb-0 text-gray-800">Produk</h1>
+            <h1 class="h3 mb-0 text-gray-800">Kategori Produk</h1>
         </div>
         <div class="orders">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="box-title">Daftar Produk</h4>
-                            <a href="{{ route('product.create') }}" class="btn btn-success btn-sm py-1 px-2 mt-2">+ Tambah
+                            <h4 class="box-title">Daftar Kategori Produk</h4>
+                            <a href="#crudCategory" data-remote="{{ route('categories.create') }}"
+                                data-target="#crudCategory" data-toggle="modal" data-title="Tambah Produk"
+                                class="btn btn-success btn-sm py-1 px-2 mt-2">+ Tambah Kategori
                                 Produk</a>
                         </div>
                         <div class="card-body--">
@@ -22,30 +24,19 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Name</th>
-                                            <th class="text-center">Type</th>
-                                            <th class="text-center">Price</th>
-                                            <th class="text-center">Quantity</th>
+                                            <th class="text-center">Foto</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse($items as $item)
-                                            <tr>
+                                            <tr class="justify-content-center align-center items-center">
                                                 <td class="text-center">{{ $item->name }}</td>
-                                                <td class="text-center text-capitalize">{{ $item->Category->name }}</td>
-                                                <td class="text-center">@rupiah($item->price)</td>
-                                                <td class="text-center">{{ $item->quantity }}</td>
+                                                <td class="text-center"><img src="{{ url($item->photo) }}" alt=""
+                                                        style="width: 80px; height: 80px;"></td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('product.gallery', $item->id) }}"
-                                                        class="btn btn-info btn-sm">
-                                                        <i class="fas fa-image"></i>
-                                                    </a>
-                                                    <a href="{{ route('product.edit', $item->id) }}"
-                                                        class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                    </a>
-                                                    <form action="{{ route('product.destroy', $item->id) }}" method="post"
-                                                        class="d-inline">
+                                                    <form action="{{ route('categories.destroy', $item->id) }}"
+                                                        method="post" class="d-inline">
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btn-danger btn-sm">

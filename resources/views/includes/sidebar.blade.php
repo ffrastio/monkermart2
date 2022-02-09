@@ -71,6 +71,21 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
+        Kategori
+    </div>
+
+    <li class="nav-item">
+        <a href="{{ route('categories.index') }}" class="nav-link">
+            <i class="fas fa-fw fa-dollar-sign"></i>
+            <span>Daftar Kategori</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
         Pengguna
     </div>
 
